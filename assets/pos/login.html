@@ -1,0 +1,55 @@
+<div class="row justify-content-end align-items-center">
+    <div class="col-auto align-self-end">
+        <div class="card mx-auto card-login2">
+            <div class="card-body">
+                <div align="center">
+                    <img src="assets/imgs/alhaddad.png" class="img-fluid" alt="Alhaddad POS" style="width: auto; height: 200px" />
+                    <hr />
+                    <h4 class="card-title mb-4">Log Masuk Alhaddad POS</h4>
+                    <hr />
+                </div>
+                <form id="loginForm" name="loginForm">
+                    <div class="mb-3">
+                        <input name="username" class="form-control" placeholder="ID Pengguna" type="text" required />
+                    </div>
+                    <div class="mb-3">
+                        <input name="password" class="form-control" placeholder="Kata Laluan" type="password" required />
+                    </div>
+                    <div class="mb-3">
+                        <a href="#" class="float-center font-sm text-muted">Lupa Kata Laluan?</a>
+                        <label class="form-check" style="visibility: hidden">
+                            <input type="checkbox" class="form-check-input" checked="" />
+                            <span class="form-check-label">Simpan</span>
+                        </label>
+                    </div>
+                    <div class="mb-4">
+                        <input type="hidden" name="jenisUser" id="jenisUser" value="2">
+                        <input type="hidden" name="loginType" id="loginType" value="1">
+                        <input type="hidden" name="firebase_token" id="firebase_token">
+                        <button type="submit" class="btn btn-primary w-100">Log Masuk</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        token = "";
+        sstRate = "";
+        servisRate = "";
+        tarikh_biasa = "";
+        tarikh_hijrah = "";
+        applyTax = "";
+        applyService = "";
+        setCookie('token', token);
+        setCookie('sst', sstRate);
+        setCookie('servis', servisRate);
+        setCookie('tarikh_biasa', tarikh_biasa);
+        setCookie('tarikh_hijrah', tarikh_hijrah);
+        setCookie('applyTax', applyTax);
+        setCookie('applyService', applyService);
+        $('#firebase_token').val(getCookie('fbToken'));
+        submitForm('#loginForm', 'login', '#isi_utama', 'POST', 1)
+    });
+</script>

@@ -1,0 +1,1 @@
+export 'jejak_parcel_state.dart';

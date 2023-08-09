@@ -1,0 +1,599 @@
+<div class="row">
+    <div id="senaraiProdukUI" class="col-12 col-md-8">
+        <div class="input-group mb-3">
+            <button onclick="dataParams(1)" type="button" class="btn btn-primary">Qahwa</button>&nbsp;
+            <button onclick="dataParams(2)" type="button" class="btn btn-primary">Lain-lain</button>&nbsp;
+            <button onclick="dataParams(null)" type="button" class="btn btn-primary">Semua</button>
+            <button class="btn btn-icon btn-aside-minimize" onclick="hideListUI(0)"><i class="text-muted material-icons md-menu_open"></i></button>
+        </div>
+        <div id="listProduk" class="row" style="position: relative"></div>
+    </div>
+    <div id="listBeliUI" class="col-12 col-md-4">
+        <div class="card card-product-grid p-2">
+            <div class="content-header row">
+                <div class="col-12 col-md-12">
+                    <div class="input-group">
+                        <h3 id="itemCounts" class="content-title card-title">Item / Unit: (0 / 0)</h3>
+                        <button style="display: none" id="tunjukSenaraiUI" class="btn btn-icon btn-aside-minimize" onclick="hideListUI(1)"><i class="text-muted material-icons md-menu_open"></i></button>
+                    </div>
+                </div>
+            </div>
+            <form id="orders" name="orders" enctype="multipart/form-data">
+                <div class="row" ondrop="drop(event)" ondragover="allowDrop(event)" id="orderDetails" style="position: relative; padding-right: 20px;"></div>
+                <hr />
+                <div class="row">
+                    <div id="SSTFiled" class="col-12">
+                        <div class="card card-product-grid p-2 fw-bold">
+                            <div class="row justify-content-between">
+                                <div class="col-12 col-md-auto" align="left">
+                                    <label>Sub-Jumlah</label>
+                                </div>
+                                <div class="col-12 col-md-auto" align="right">
+                                    <h4 id="subTotal_lbl">RM 0.00</h4>
+                                    <input type="hidden" class="diskaun form-control" id="subTotal" name="subTotal" readonly value="0.00">
+                                </div>
+                            </div>
+                            <div class="row justify-content-between">
+                                <div class="col-12 col-md-auto" align="left">
+                                    <div class="input-group">
+                                        <div class="form-check"><input id="hidupkanTax" class="tetapanKadar form-check-input" type="checkbox" value="1"></div>
+                                        <label id="sstLblRate"></label>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-auto" align="right">
+                                    <h4 id="totSST_lbl">RM 0.00</h4>
+                                    <input type="hidden" class="diskaun form-control" id="totSST" name="totSST" readonly value="0.00">
+                                </div>
+                            </div>
+                            <div class="row justify-content-between">
+                                <div class="col-12 col-md-auto" align="left">
+                                    <div class="input-group">
+                                        <div class="form-check"><input id="hidupkanServis" class="tetapanKadar form-check-input" type="checkbox" value="1"></div>
+                                        <label id="servisLblRate"></label>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-auto" align="right">
+                                    <h4 id="totService_lbl">RM 0.00</h4>
+                                    <input type="hidden" class="diskaun form-control" id="totService" name="totService" readonly value="0.00">
+                                </div>
+                            </div>
+                            <div class="row justify-content-between">
+                                <div class="col-12 col-md-auto" align="left">
+                                    <label>Penggenapan (RM)</label>
+                                </div>
+                                <div class="col-12 col-md-auto" align="right">
+                                    <h4 id="totPenggenapan_lbl">RM 0</h4>
+                                    <input type="hidden" class="form-control" id="penggenapan" name="penggenapan" readonly value="0.00">
+                                    <input type="hidden" class="form-control" id="totDiscount" name="totDiscount" readonly value="0.00">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="JumlahField" class="col-12">
+                        <div id="ruangJumlah" onclick="$('#paparHarga').html('Bayaran: RM '+$('#grandTotal').val())" class="d-grid card card-product-grid p-2">
+                            <div class="row btn">
+                                <div class="col-12 col-md-12 fw-bold">
+                                    <label>Jumlah Bayaran (RM)</label>
+                                    <h1 id="grandTotalLbl">RM 0.00</h1>
+                                    <input type="hidden" class="form-control" id="grandTotal" name="grandTotal" readonly value="0">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input id="premis_id" type="hidden" name="premis_id">
+                <input class="copy-bayaran" id="profil_id_copy" type="hidden" name="profil_id">
+                <input id="adminUsers_id" type="hidden" name="adminUsers_id">
+                <input id="saleType" type="hidden" name="saleType" value="457">
+                <input class="copy-bayaran" id="noPengenalan_copy" type="hidden" name="noPengenalan">
+                <input class="copy-bayaran" id="wallet_copy" type="hidden" name="wallet">
+                <input class="copy-bayaran" id="points_copy" type="hidden" name="points">
+                <input class="copy-bayaran" id="cash_copy" type="hidden" name="cashGiven">
+                <input class="copy-bayaran" id="balance_copy" type="hidden" name="balanceGiven">
+                <input class="copy-bayaran" id="paymentChannel_copy" type="hidden" name="paymentChannel">
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel2" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel2">Varian Produk</h5>
+            </div>
+            <div class="modal-body">
+                <div id="itemVarian" class="container-fluid">
+                    <div class="row"><div class="col-12">Sila pilih add-on:</div></div>
+                </div>
+            </div>
+            <div id="buttonLabel" class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <form enctype="multipart/form-data">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="staticBackdropLabel">Bayaran</h3>
+                    <button onclick="clearPaymentData()" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-user fa-2xl"></i></span>
+                                    <input onchange="checkDataUser(this.value)" id="noPengenalan" name="noPengenalan" type="text" class="terima-bayaran form-control form-control-lg" placeholder="No K/P Ahli (jika ada)" aria-label="No K/P Ahli (jika ada)" aria-describedby="basic-addon1">
+                                </div>
+                            </div>
+                        </div>
+                        <div id="custInfo" class="row"></div>
+                        <div class="row justify-content-between">
+                            <div class="col-12 col-md-auto" style="display: none">
+                                <div class="row p-1">
+                                    <div class="keypad-custom col-12 fw-bold">
+                                        <button class="btn btn-brand btn-lg" type="button">7</button>
+                                        <button class="btn btn-brand btn-lg" type="button">8</button>
+                                        <button class="btn btn-brand btn-lg" type="button">9</button>
+                                    </div>
+                                </div>
+                                <div class="row p-1">
+                                    <div class="keypad-custom col-12 fw-bold">
+                                        <button class="btn btn-brand btn-lg" type="button">4</button>
+                                        <button class="btn btn-brand btn-lg" type="button">5</button>
+                                        <button class="btn btn-brand btn-lg" type="button">6</button>
+                                    </div>
+                                </div>
+                                <div class="row p-1">
+                                    <div class="keypad-custom col-12 fw-bold">
+                                        <button class="btn btn-brand btn-lg" type="button">1</button>
+                                        <button class="btn btn-brand btn-lg" type="button">2</button>
+                                        <button class="btn btn-brand btn-lg" type="button">3</button>
+                                    </div>
+                                </div>
+                                <div class="row p-1 justify-content-between">
+                                    <div class="keypad-custom col-12 fw-bold">
+                                        <button class="btn btn-brand btn-lg" type="button">0</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-auto">
+                                <div class="input-group mb-3" style="display: none">
+                                    <span class="input-group-text" id="basic-addon2"><i class="fa-solid fa-gift fa-2xl"></i></span>
+                                    <input id="kodBaucarLabel" name="kodBaucarLabel" type="text" class="terima-bayaran form-control form-control-lg" placeholder="Kod Baucar" aria-label="Kod Baucar" aria-describedby="basic-addon2">
+                                </div>
+                                <div id="walletAda" class="ahli-sahaja input-group mb-3" style="display: none">
+                                    <span class="input-group-text" id="basic-addon3"><i class="fa-solid fa-wallet fa-2xl"></i></span>
+                                    <input oninput="kiraBaki()" id="walletLabel" name="wallet" type="number" class="bayar matawang2 terima-bayaran form-control form-control-lg" placeholder="Wallet" aria-label="Wallet" aria-describedby="basic-addon3" min="0" value="0">
+                                </div>
+                                <div id="pointAda" class="ahli-sahaja input-group mb-3" style="display: none">
+                                    <input type="hidden" id="bakiPoint">
+                                    <span class="input-group-text fw-bold fs-5" id="basic-addon4">Point (RM) &nbsp;<i class="fa-solid fa-tags fa-2xl"></i></span>
+                                    <input oninput="kiraBaki()" id="pointLabel" name="points" type="number" class="bayar terima-bayaran form-control form-control-lg" placeholder="Points" aria-label="Points" aria-describedby="basic-addon4" min="0" value="0">
+                                    <button onclick="gunaPointIkutHarga()" type="button" class="btn btn-primary fw-bold fs-5">OK</button>
+                                    <button onclick="$('#pointLabel').val('0'); kiraBaki()" type="button" class="btn btn-info fw-bold fs-5">Reset</button>
+                                </div>
+                                <div id="amaranPoint" class="alert alert-danger" role="alert" style="display: none">Nilai dimasukkan lebih daripada baki Point, sila betulkan semula</div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text fw-bold fs-5" id="basic-addon5">Amaun (RM) &nbsp;<i class="fa-solid fa-money-bill-1 fa-2xl"></i></span>
+                                    <input oninput="kiraBaki()" id="bayarLabel" name="bayar" type="number" class="bayar matawang2 terima-bayaran form-control form-control-lg" placeholder="Tunai" aria-label="Tunai" aria-describedby="basic-addon5" min="0" value="0">
+                                    <button onclick="bayarGenap()" type="button" class="btn btn-primary fw-bold fs-5">OK</button>
+                                    <button onclick="$('#bayarLabel').val('0'); kiraBaki()" type="button" class="btn btn-info fw-bold fs-5">Reset</button>
+                                </div>
+                                <div id="paymentChannelContainer" class="input-group mb-3" style="display: none"></div>
+                            </div>
+                            <div class="col-12 col-md-auto">
+                                <div class="input-group mb-3">
+                                    <h2 class="copy-label" id="paparHarga"></h2>
+                                </div>
+                                <div class="input-group mb-3">
+                                    <h2 class="copy-label" id="paparBayaranDibuat"></h2>
+                                </div>
+                                <div class="input-group mb-3">
+                                    <h2 class="copy-label" id="paparBaki"></h2>
+                                    <input id="bakiLabel" type="hidden">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button onclick="clearPaymentData()" type="button" class="btn btn-secondary fw-bold fs-4" data-bs-dismiss="modal">Tutup</button>
+                    <button disabled id="buttonTerima" onclick="return copyPaymentData()" type="submit" class="btn btn-primary fw-bold fs-4" data-bs-dismiss="modal">Terima bayaran</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    if(applyTax == 1) $('#hidupkanTax').attr('checked', true);
+    if(applyService == 1) $('#hidupkanServis').attr('checked', true);
+
+    function penggenapan(nomborAsal) {
+        var nombor = nomborAsal;
+        var lastNumber = nombor.substr(nombor.length - 1);
+        var lastNumberDecimal;
+        lastNumberDecimal = "0.0"+lastNumber;
+        if(lastNumber == 5 || lastNumber == 0) {
+            return parseFloat(nomborAsal).toFixed(2);
+        } else {
+            if (lastNumber == 3 || lastNumber == 4 || lastNumber == 6 || lastNumber == 7) nombor = parseFloat(nombor) - parseFloat(lastNumberDecimal) + 0.05;
+            else if (lastNumber == 8 || lastNumber == 9) nombor = parseFloat(nombor) - parseFloat(lastNumberDecimal) + 0.1;
+            else if (lastNumber == 1 || lastNumber == 2) nombor = parseFloat(nombor) - parseFloat(lastNumberDecimal);
+            return parseFloat(nombor).toFixed(2);
+        }
+    }
+
+    function hideListUI(a) {
+        if(a == 0) {
+            $('#senaraiProdukUI').hide();
+            $('#tunjukSenaraiUI').show();
+            $('#SSTFiled, #JumlahField, .orderList-col').removeClass('col-12');
+            $('#SSTFiled, #JumlahField').addClass('col-6');
+            $('.orderList-col').addClass('col-4');
+            $('#orderDetails').css('height', tinggi - 324 + 'px');
+            $('#listBeliUI').removeClass('col-md-4');
+        }
+        else {
+            $('#SSTFiled, #JumlahField').removeClass('col-6');
+            $('.orderList-col').removeClass('col-4');
+            $('#SSTFiled, #JumlahField, .orderList-col').addClass('col-12');
+            $('#orderDetails').css('height', tinggi - 450 + 'px');
+            $('#senaraiProdukUI').show();
+            $('#tunjukSenaraiUI').hide();
+            $('#listBeliUI').addClass('col-md-4');
+        }
+    }
+    function dataParams(qahwa) {
+        var sendData;
+        sendData = {"objectName": "senaraiProduk", "qahwa": qahwa};
+        selfUpdate(sendData, 2, 'dynamic/products', '#listProduk', 'POST', 0);
+    }
+    dataParams(null);
+
+    function requestPilihan(kategoriPilihan) {
+        var sendData;
+        var responseData;
+        sendData = {"objectName": "pilihan", "cols":"id,pilihanLabel"};
+        if(kategoriPilihan != "" && kategoriPilihan != null && kategoriPilihan != "null") {
+            selfUpdate(sendData, 2, 'dynamic/getPilihan/'+kategoriPilihan, '#paymentChannelContainer', 'POST', 0);
+        }
+    }
+
+    requestPilihan(13);
+
+    function resizeListProduk() {
+        //$('#listProduk').css('height', tinggi - $('footer').height() - 100 + 'px');
+        $('#listProduk').css('height', tinggi - 100 + 'px');
+        if($('#SSTFiled').attr('class') == "col-12") $('#orderDetails').css('height', tinggi - 450 + 'px');
+        else $('#orderDetails').css('height', tinggi - 324 + 'px');
+    }
+    function initPerfectScroll() {
+        if (typeof ps_product === 'undefined') {
+            const ps_product = new PerfectScrollbar('#listProduk');
+        }
+        else ps_product.update();
+        if (typeof ps_ordersDetails === 'undefined') {
+            const ps_ordersDetails = new PerfectScrollbar('#orderDetails');
+        }
+        else ps_ordersDetails.update();
+    }
+    resizeListProduk();
+    initPerfectScroll();
+    $(window).resize(function() {
+        resizeListProduk();
+        initPerfectScroll();
+    });
+    $('#adminUsers_id').val(idUser);
+    $('#premis_id').val(getCookie("premis_id"));
+    var itemBarang = 0;
+    function kiraJumlah() {
+        var sst = 0;
+        var kuantiti = 0;
+        var diskaunInput = $('#totDiscount');
+        var jumlah = 0.00;
+        var jumlahQahwa = 0.00;
+        var jumlahSST = 0.00;
+        var jumlahServis = 0.00;
+        var jumlahBesar = 0.00;
+        var totServis = 0.00;
+        var jumlahBersih = 0.00;
+        var penggenapanValue = 0.00;
+        if(!$('#hidupkanTax').is(':checked')) sstRate = 0;
+        else sstRate = getCookie('sst');
+        if(!$('#hidupkanServis').is(':checked')) servisRate = 0;
+        else servisRate = getCookie('servis');
+        $('.amaun').each(function(i) {
+            jumlah = (parseFloat(jumlah) + parseFloat($(this).val())).toFixed(2);
+            //if($('#qahwa'+$(this).attr("id")).val() == 1) jumlahQahwa = (parseFloat(jumlahQahwa) + parseFloat($(this).val())).toFixed(2);
+        });
+        $('.amaun_sst').each(function(i) {
+            jumlahSST = (parseFloat(jumlahSST) + parseFloat($(this).val())).toFixed(2);
+        });
+        $('.amaun_servis').each(function(i) {
+            jumlahServis = (parseFloat(jumlahServis) + parseFloat($(this).val())).toFixed(2);
+        });
+        $('.kuantiti').each(function(i) {
+            kuantiti = parseInt(kuantiti) + parseInt($(this).val());
+        });
+        //jumlahBesar = (parseFloat(jumlah) - parseFloat(diskaunInput.val())).toFixed(2);
+        jumlahBesar = parseFloat(jumlah).toFixed(2);
+        sst = (jumlah * parseFloat(parseInt(sstRate) / 100)).toFixed(2);
+        totServis = (jumlahQahwa * parseFloat(parseInt(servisRate) / 100)).toFixed(2);
+        $('#totSST').val(jumlahSST);
+        $('#totSST_lbl').html('RM '+addCommas(jumlahSST));
+        $('#totService').val(jumlahServis);
+        $('#totService_lbl').html('RM '+addCommas(jumlahServis));
+        $('#subTotal').val(jumlah);
+        $('#subTotal_lbl').html('RM '+addCommas(jumlah));
+        jumlahBersih = (parseFloat(jumlahBesar) + parseFloat(jumlahSST) + parseFloat(jumlahServis)).toFixed(2);
+        penggenapanValue = (penggenapan(jumlahBersih.toString()) - jumlahBersih).toFixed(2);
+        $('#totPenggenapan_lbl').html('RM '+addCommas(penggenapanValue));
+        jumlahBersih = penggenapan(jumlahBersih.toString());
+        $('#grandTotal').val(jumlahBersih);
+        $('#grandTotalLbl').html('RM '+addCommas($('#grandTotal').val()));
+        itemBarang = parseInt($('.amaun').length);
+        if(itemBarang > 0) {
+            $('.tetapanKadar').attr('disabled', true);
+            buttonDeleteSemua = '<i onclick="$(\'.orderList-details\').remove(); kiraJumlah()" class="fa-solid fa-circle-minus fa-lg"></i> ';
+        }
+        else {
+            $('.tetapanKadar').removeAttr('disabled');
+            buttonDeleteSemua = '';
+        }
+        $('#itemCounts').html(buttonDeleteSemua+'Item / Unit: ('+itemBarang+' / '+kuantiti+')');
+        $('#carian_produk').val(null);
+        if($('#subTotal').val() > 0) {
+            $('#ruangJumlah').addClass('alert alert-danger');
+            $('#ruangJumlah').attr({'role':'alert', 'data-bs-toggle':'modal', 'data-bs-target':'#staticBackdrop'});
+        }
+        else {
+            $('#ruangJumlah').removeClass('alert alert-danger');
+            $("#ruangJumlah").removeAttr('role data-bs-toggle data-bs-target');
+        }
+    }
+
+    function semakAddOn(row, id, addOnId, varians, harga) {
+        if($('#hargaAddOn_'+id+'_'+addOnId+'').is(':checked')) {
+            $('#'+row).removeClass('alert-success');
+            $('#'+row).addClass('alert-light');
+            $('#hargaAddOn_'+id+'_'+addOnId+'').prop('checked', false);
+        }
+        else {
+            $('#'+row).removeClass('alert-light');
+            $('#'+row).addClass('alert-success');
+            $('#hargaAddOn_'+id+'_'+addOnId+'').prop('checked', true);
+        }
+    }
+
+    function teruskanAddOn(id, name, qahwa) {
+        var amaunAddOn = 0;
+        var hargaVarian = "";
+        var namaVarian = "";
+        if(!$('#hidupkanTax').is(':checked')) sstRate = 0;
+        else sstRate = getCookie('sst');
+        if(!$('#hidupkanServis').is(':checked')) servisRate = 0;
+        else servisRate = getCookie('servis');
+        $('#variansLabel_'+id).show();
+        k = 0;
+        $('.amaunAddOn'+id).each(function(i) {
+            if($(this).is(':checked')) {
+                if(k > 0) {
+                    comma = ", ";
+                    comma2 = ",";
+                }
+                else {
+                    comma = "";
+                    comma2 = "";
+                }
+                amaunAddOn = (parseFloat(amaunAddOn) + parseFloat($(this).val())).toFixed(2);
+                //$('#variansLabel_'+id).append(comma+$('.variansGroup'+id+':eq('+i+')').html()+' (RM '+parseFloat($(this).val()).toFixed(2)+')');
+                $('#variansLabel_'+id).append(comma+$('.variansGroup'+id+':eq('+i+')').html());
+                namaVarian = namaVarian + comma2 + $('.variansGroup'+id+':eq('+i+')').html();
+                hargaVarian = hargaVarian + comma2 + parseFloat($(this).val()).toFixed(2);
+                k++;
+            }
+        });
+        $('#varians_'+id).val(namaVarian);
+        $('#variansHarga_'+id).val(hargaVarian);
+        hargaInput = $('#harga_'+id);
+        hargaSSTInput = $('#sst_'+id);
+        hargaServisInput = $('#servisCaj_'+id);
+        hargaInput.val((parseFloat(hargaInput.val()) + parseFloat(amaunAddOn)).toFixed(2));
+        $('#hargaAsal_'+id).val(hargaInput.val());
+        hargaSSTInput.val((parseFloat(hargaInput.val()) * parseFloat(sstRate/100)).toFixed(2));
+        if(qahwa == 1) {
+            hargaServisInput.val((parseFloat(hargaInput.val()) * parseFloat(servisRate/100)).toFixed(2));
+            $('#servisHarga_' + id).html(', RM '+addCommas(hargaServisInput.val()));
+        }
+        $('#qtyHarga_' + id).html('RM '+addCommas(hargaInput.val()));
+        $('#sstHarga_' + id).html('RM '+addCommas(hargaSSTInput.val()));
+        kiraJumlah();
+    }
+
+    function tambahProduk(id, name, harga, kuantiti, qahwa, varians) {
+        var hargaServis = 0;
+        if(!$('#hidupkanTax').is(':checked')) sstRate = 0;
+        else sstRate = getCookie('sst');
+        if(!$('#hidupkanServis').is(':checked')) servisRate = 0;
+        else servisRate = getCookie('servis');
+        if($('#produk_'+id+'').length || $('#'+id+'').length) {
+            hargaInput = $('#harga_'+id);
+            hargaSSTInput = $('#sst_'+id);
+            hargaServisInput = $('#servisCaj_'+id);
+            qty = $('#qty_'+id);
+            qty.val(parseInt(qty.val()) + kuantiti);
+            hargaInput.val((parseFloat(harga) * qty.val()).toFixed(2));
+            hargaSSTInput.val((parseFloat(harga) * qty.val() * parseFloat(sstRate/100)).toFixed(2));
+            if(qahwa == 1) {
+                hargaServisInput.val((parseFloat(harga) * qty.val() * parseFloat(servisRate/100)).toFixed(2));
+                $('#servisHarga_' + id).html(', RM '+addCommas(hargaServisInput.val()));
+            }
+            $('#qtyHarga_' + id).html('RM '+addCommas(hargaInput.val()));
+            $('#sstHarga_' + id).html('RM '+addCommas(hargaSSTInput.val()));
+            if(qty.val() > 1) $('#tolak_'+id).removeAttr('disabled');
+            else $('#tolak_'+id).attr('disabled', true);
+        }
+        else {
+            var id_key = id;
+            if(varians != "0") {
+                $('#itemVarian, #buttonLabel').html('');
+                $('#staticBackdropLabel2').html('Add-On: '+name);
+                dataVarians = JSON.parse(addslashes2(varians));
+                randomID = Math.floor(Math.random() * 99999);
+                idProduk = "produk_"+id+"_"+randomID;
+                id = idProduk;
+                $.each(dataVarians, function(i, obj) {
+                    htmlVariansData = '<div id="barisAddOn_'+idProduk+'_'+i+'" class="row mb-3 alert alert-light fw-bold border" onclick="semakAddOn(\'barisAddOn_'+idProduk+'_'+i+'\', \''+idProduk+'\', '+i+', \''+obj['varians']+'\', '+obj['harga']+')" role="alert">' +
+                        '<div class="col-md-auto form-check"><input onclick="semakAddOn(\'barisAddOn_'+idProduk+'_'+i+'\', \''+idProduk+'\', '+i+', \''+obj['varians']+'\', '+obj['harga']+')" id="hargaAddOn_'+idProduk+'_'+i+'" class="amaunAddOn'+idProduk+' form-check-input" type="checkbox" value="'+obj['harga']+'"></div>' +
+                        '<div class="variansGroup'+idProduk+' col-md-auto">'+obj['varians']+'</div>' +
+                        '<div class="col-md-auto">+ RM'+obj['harga']+'</div>' +
+                        '</div>';
+                    $('#itemVarian').append(htmlVariansData);
+                });
+                $('#buttonLabel').html('<button onclick="return teruskanAddOn(\''+id+'\', \''+name+'\', '+qahwa+')" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Teruskan</button>');
+                $('#staticBackdrop2').modal('show');
+            }
+            else idProduk = "produk_"+id;
+            hargaSST = (parseFloat(harga) * parseFloat(sstRate/100)).toFixed(2);
+            if(qahwa == 1) hargaServis = (parseFloat(harga) * parseFloat(servisRate/100)).toFixed(2);
+            produkList = '<div class="orderList-col col-12"><div id="'+idProduk+'" class="orderList-details card card-product-grid p-2 fw-bold">\n' +
+                '                        <div class="row">\n' +
+                '                            <div class="col-12 col-md-12 align-self-start">\n' +
+                '                                <label onclick="$(\'#' + idProduk + '\').remove(); kiraJumlah()"><i class="fa-solid fa-circle-minus fa-xl"></i> ' + name + '</label>\n' +
+                '                            </div>\n' +
+                '                        </div>\n' +
+                '<div class="row">\n' +
+                '<div class="col-12 col-md-6">\n' +
+                '                                <h4 id="qtyHarga_' + id + '">RM ' + addCommas(harga) + '</h4>\n' +
+                '                                <label id="sstHarga_' + id + '">RM ' + addCommas(hargaSST) + '</label>\n' +
+                '                                <label id="servisHarga_' + id + '" style="display: none">, RM ' + addCommas(hargaServis) + '</label>\n' +
+                '                                <br /><label id="variansLabel_' + id + '" style="display: none"></label>\n' +
+                '</div>\n' +
+                '                            <div class="col-12 col-md-6">\n' +
+                '                                <div class="input-group">\n' +
+                '                                    <button id="tolak_' + id + '" onclick="tambahProdukNext(\''+id+'\', \''+name+'\', \''+harga+'\', -1)" type="button" class="btn btn-primary btn-sm" style="padding: 5px 5px 5px 5px" disabled="disabled"><i class="fa-solid fa-circle-minus fa-xl"></i></button>\n' +
+                '                                    <input id="qty_' + id + '" class="kuantiti form-control input-sm input-number" name="kuantiti[]" min="1" value="1" size="4" readonly>\n' +
+                '                                    <button id="tambah_' + id + '" onclick="tambahProdukNext(\''+id+'\', \''+name+'\', \''+harga+'\', 1)" type="button" class="btn btn-primary btn-sm" style="padding: 5px 5px 5px 5px"><i class="fa-solid fa-circle-plus fa-xl"></i></button>\n' +
+                '                                </div>\n' +
+                '                                <input id="hargaAsal_' + id + '" type="hidden" value="' + harga + '">\n' +
+                '                                <input id="harga_' + id + '" type="hidden" class="amaun" name="harga[]" value="' + harga + '">\n' +
+                '                                <input id="varians_' + id + '" type="hidden" name="addOn[]">\n' +
+                '                                <input id="variansHarga_' + id + '" type="hidden" name="addOnHarga[]">\n' +
+                '                                <input id="sst_' + id + '" type="hidden" class="amaun_sst" name="sst[]" value="' + hargaSST + '">\n' +
+                '                                <input id="servisCaj_' + id + '" type="hidden" class="amaun_servis" name="servisCaj[]" value="' + hargaServis + '">\n' +
+                '                                <input class="qahwa" type="hidden" id="qahwaharga_' + id + '" value="' + qahwa + '">\n' +
+                '                                <input type="hidden" name="product_id[]" value="' + id_key + '">\n' +
+                '                            </div>\n' +
+                '</div></div></div>\n';
+            $('#orderDetails').append(produkList);
+        }
+        if(qahwa == 1) $('#servisHarga_' + id).removeAttr("style");
+        kiraJumlah();
+    }
+
+    function tambahProdukNext(id, name, harga, kuantiti) {
+        tambahProduk(id, name, $('#hargaAsal_'+id).val(), kuantiti);
+    }
+
+    function kiraBaki() {
+        var bakiBayar = 0;
+        var lebihan = 0;
+        $('.bayar').each(function(i) {
+            bakiBayar = (parseFloat(bakiBayar) + parseFloat($(this).val())).toFixed(2);
+        });
+        if(isNaN(bakiBayar)) bakiBayar = 0.00;
+        lebihan = (parseFloat($('#grandTotal').val()) - parseFloat(bakiBayar)).toFixed(2);
+        if(isNaN(lebihan)) lebihan = 0.00;
+        $('#paparBayaranDibuat').html('Terima: RM '+bakiBayar);
+        if(lebihan > 0) $('#paparBaki').html('Kurang: RM '+lebihan);
+        else $('#paparBaki').html('Baki: RM '+lebihan);
+        $('#bakiLabel').val(lebihan);
+        if($('#bakiPoint').val() >= parseFloat($('#grandTotal').val())) $('#pointLabel').attr('max', parseFloat($('#grandTotal').val()));
+        if(lebihan <= 0 && ($('#pointLabel').val() <= $('#bakiPoint').val() || $('#bakiPoint').val() == "")) {
+            $('#buttonTerima').removeAttr('disabled');
+            $('#amaranPoint').hide();
+        }
+        else {
+            if($('#pointLabel').val() > $('#bakiPoint').val() && $('#pointLabel').val() > 0) $('#amaranPoint').show();
+            else $('#amaranPoint').hide();
+            $('#buttonTerima').attr('disabled', true);
+        }
+    }
+
+    function gunaPointIkutHarga() {
+        if($('#bakiPoint').val() >= parseFloat($('#grandTotal').val())) {
+            if($('#bayarLabel').val() > 0) $('#pointLabel').val(parseFloat($('#bakiLabel').val()).toFixed(2));
+            else $('#pointLabel').val(parseFloat($('#grandTotal').val()).toFixed(2));
+        }
+        else $('#pointLabel').val(parseFloat($('#bakiPoint').val()).toFixed(2));
+        kiraBaki();
+    }
+
+    function bayarGenap() {
+        if($('#pointLabel').val() > 0) $('#bayarLabel').val(parseFloat($('#bakiLabel').val()).toFixed(2));
+        else $('#bayarLabel').val(parseFloat($('#grandTotal').val()).toFixed(2));
+        kiraBaki();
+    }
+
+    $(".bayar").on("input", function() {
+        if(!$(this).val()) $(this).val('0');
+    });
+
+    function allowDrop(ev) {
+        ev.preventDefault();
+        ev.dataTransfer.items.clear();
+    }
+
+    function drag(ev, id, name, harga, kuantiti, qahwa, varians) {
+        ev.dataTransfer.items.clear();
+        if(kuantiti == 1) {
+            ev.dataTransfer.setData("id", id);
+            ev.dataTransfer.setData("name", name);
+            ev.dataTransfer.setData("harga", harga);
+            ev.dataTransfer.setData("kuantiti", parseInt(kuantiti));
+            ev.dataTransfer.setData("qahwa", parseInt(qahwa));
+            ev.dataTransfer.setData("varians", varians);
+        }
+    }
+
+    function drop(ev) {
+        ev.preventDefault();
+        var id = ev.dataTransfer.getData("id");
+        var name = ev.dataTransfer.getData("name");
+        var harga = ev.dataTransfer.getData("harga");
+        var kuantiti = ev.dataTransfer.getData("kuantiti");
+        var qahwa = ev.dataTransfer.getData("qahwa");
+        var varians = ev.dataTransfer.getData("varians");
+        if(kuantiti == 1) tambahProduk(id, name, harga, parseInt(kuantiti), parseInt(qahwa), varians);
+        ev.dataTransfer.items.clear();
+        // ev.target.appendChild(document.getElementById(data));
+    }
+
+    function clearPaymentData() {
+        $('#custInfo, .copy-label').html('');
+        $('.terima-bayaran, .copy-bayaran').val('0');
+        $('.ahli-sahaja').hide();
+        $('#noPengenalan').val(null);
+        $('#paymentChannel').val('192');
+    }
+
+    function copyPaymentData() {
+        $('#noPengenalan_copy').val($('#noPengenalan').val());
+        $('#wallet_copy').val($('#walletLabel').val());
+        $('#points_copy').val($('#pointLabel').val());
+        $('#cash_copy').val($('#bayarLabel').val());
+        $('#balance_copy').val($('#bakiLabel').val());
+        $('#paymentChannel_copy').val($('#paymentChannel').val());
+        $('#profil_id_copy').val($('#profil_id').val());
+        submitForm('#orders', 'simpanOrder', '#isi_utama', 'POST', 1);
+        $('#orders').submit();
+    }
+
+    function checkDataUser(noIC) {
+        var dataSend = {"noPengenalan":+noIC};
+        selfUpdate(dataSend, 2, 'dynamic/getUserPoints', '#custInfo', 'POST', 0);
+    }
+</script>

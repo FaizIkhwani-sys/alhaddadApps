@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "894516371487",
+    "project_id": "sistem-alhaddad",
+    "storage_bucket": "sistem-alhaddad.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:894516371487:android:1bea4966a1b4cfbb28752a",
+        "android_client_info": {
+          "package_name": "com.example.apps_al_haddad"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "894516371487-2a3r7teshu2p7enpkpojr5viidtlems9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFY2jwTk2aO3WcMUX4GIbpVApAJPsQKAc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "894516371487-2a3r7teshu2p7enpkpojr5viidtlems9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "894516371487-4jmnsqm1bk0fd5rncd24n1gbcku7o58f.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.appsAlHaddad"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:894516371487:android:cd650301eecbcb5028752a",
+        "android_client_info": {
+          "package_name": "com.myrichdynasty.alhaddadapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "894516371487-2a3r7teshu2p7enpkpojr5viidtlems9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFY2jwTk2aO3WcMUX4GIbpVApAJPsQKAc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "894516371487-2a3r7teshu2p7enpkpojr5viidtlems9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "894516371487-4jmnsqm1bk0fd5rncd24n1gbcku7o58f.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.appsAlHaddad"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
